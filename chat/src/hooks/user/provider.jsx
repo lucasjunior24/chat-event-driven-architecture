@@ -2,21 +2,22 @@ import { useEffect, useState } from 'react';
 import { userContext } from './context';
 import useChat from 'hooks/chat';
 import fetch from 'config/fetchInstance';
-// import { socket } from 'config/socket';
+import { socket } from 'config/socket';
 
 export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);
   const { data: chatData } = useChat();
 
-  // useEffect(() => {
-  //   socket.connect()
-  //   socket.on('connect', () => {
-  //     console.log("conectado!!!!!!")
-  //   })
-  //   return () => {
-  //     socket.disconnect()
-  //   }
-  // }, [])
+  useEffect(() => {
+    socket.connect()
+    
+    socket.on('new-message', (data) => {
+      console.log("message!!!!!!", data)
+    })
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
   useEffect(() => {
     const currentChatIndex = data?.chats.findIndex(chat => chat.id === chatData?.id);
     if (data?.chats[currentChatIndex]?.unreadMessages > 0) {
