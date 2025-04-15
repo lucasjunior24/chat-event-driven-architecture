@@ -20,6 +20,9 @@ io.on('connection', (socket) => {
     });
   })
 
+  socket.on("join-rooms", (chatIds) => {
+    chatIds.forEach(chatID => socket.join(`chat${chatID}`))
+  })
   socket.on('add-user-id', (id) => {
     userController.logonUser(id, socket, () => {
       io.emit('user-logged', id);
