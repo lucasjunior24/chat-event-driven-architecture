@@ -76,6 +76,7 @@ chatsRouter.post('/:id/messages', (req, res) => {
 
   console.log(`chat${chatId}`)
   io.to(`chat${chatId}`).emit('new-message', {
+    chatId,
     id: req.body.userId,
     newMessage: req.body
   });
