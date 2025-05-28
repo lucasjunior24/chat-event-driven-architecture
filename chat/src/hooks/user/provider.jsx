@@ -29,6 +29,7 @@ export const UserProvider = ({ children }) => {
       })
     })
     return () => {
+      socket.off("new-message")
       socket.disconnect()
     }
   }, [])
@@ -55,6 +56,20 @@ export const UserProvider = ({ children }) => {
     }
   }, [data?.id, data?.chats, chatData?.id])
 
+
+  useEffect(() => {
+    if (data?.id) {
+      socket.on("new-login", (id) => {
+        if (data.id !== id)  {
+          console.log("new id: ", id)
+        }
+      })
+  
+    }
+    return () => {
+      socket.off("new-login")
+    }
+  }, [data?.id])
   return (
     <userContext.Provider value={{ data, setData }}>
       {children}

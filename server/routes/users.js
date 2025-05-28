@@ -1,6 +1,7 @@
 import express from 'express';
 import { writeFile } from '../utils/file.js';
 import {v4 as uuidv4} from "uuid"
+import { io } from '../config/instances.js';
 
 function getUsuarioById(id, cb) {
   import("../db.json", { with: { type: "json" } }).then(module => {
@@ -8,7 +9,7 @@ function getUsuarioById(id, cb) {
     const newDb = { ...dbFromImport };
     const { users, chats } = newDb;
     const userIndex = users.findIndex((userDb) => userDb.id === Number(id));
-    const user = { ...users[userIndex] };
+    const user = users[userIndex];
 
     if (user) {
       const otherUsers = [...users.filter((userDb) => userDb.id !== user.id)];
@@ -59,7 +60,7 @@ function getUsuarioById(id, cb) {
           })
         }
       });
-
+      user.isLogged = true
       writeFile(newDb);
       cb(user);
     } else cb(null);
@@ -68,12 +69,6 @@ function getUsuarioById(id, cb) {
 
 const usersRouter = express.Router();
 
-usersRouter.get('/:id', (req, res) => {
-  getUsuarioById(req.params.id, (user) => {
-    if (user) res.status(200).json(user);
-    else res.status(404).json();
-  });
-});
 
 usersRouter.post('/login', (req, res) => {
   import("../db.json", { with: { type: "json" } }).then(module => {
@@ -87,6 +82,7 @@ usersRouter.post('/login', (req, res) => {
     );
     if (user) {
       getUsuarioById(user.id, (loggedUser) => {
+        io.emit("new-login", user.id)
         res.status(200).json({ ...user, ...loggedUser });
       });
     } else {
