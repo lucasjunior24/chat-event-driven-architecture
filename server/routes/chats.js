@@ -12,8 +12,8 @@ chatsRouter.post('/:id/messages', (req, res) => {
   const otherUserIndex = newDb.users.findIndex(userDb => userDb.id === req.body.otherUserId);
   const currentUser = newDb.users[userIndex];
   const currentOtherUser = newDb.users[otherUserIndex];
-  let chatId = Number(req.params.id);
-  let chatIndex = newDb.chats.findIndex(chatDb => chatDb.id === chatId);
+  let chatId = req.params.id;
+  let chatIndex = newDb.chats.findIndex(chatDb => String(chatDb.id) === chatId);
   let userChatIndex = currentUser.chats.findIndex(chatDb => chatDb.participants.includes(req.body.otherUserId))
   let otherUserChatIndex = currentOtherUser.chats.findIndex(chatDb => chatDb.participants.includes(req.body.userId))
   
@@ -88,10 +88,10 @@ chatsRouter.post('/:id/messages', (req, res) => {
 
 chatsRouter.post('/:chatId/readMessages', (req, res) => {
   const newDb = { ...db };
-  const chatId = Number(req.params.chatId);
+  const chatId = req.params.chatId;
   const userIndex = newDb.users.findIndex(userDb => userDb.id === req.body.id);
   const currentUser = newDb.users[userIndex];
-  const userChatIndex = currentUser.chats.findIndex(chatDb => chatDb.id === chatId);
+  const userChatIndex = currentUser.chats.findIndex(chatDb => String(chatDb.id) === chatId);
   currentUser.chats[userChatIndex].unreadMessages = 0;
   io.emit('read-message', currentUser);
   res.status(200).json();
