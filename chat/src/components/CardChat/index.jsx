@@ -5,6 +5,7 @@ export default function CardChat({
   name,
   date,
   unreadMessages,
+  isLogged,
   messages = [],
   image,
   onClick,
@@ -18,6 +19,7 @@ export default function CardChat({
       date,
       unreadMessages,
       messages,
+      isLogged,
       image,
       ...props,
     });
@@ -26,7 +28,7 @@ export default function CardChat({
   return (
     <div className='cardChat-container' onClick={selecionar}>
       <div className='cardChat-container-image'>
-        <Avatar image={image} />
+        <Avatar image={image} isLogged={isLogged} />
       </div>
       <div className='cardChat-container-list'>
         <div className='cardChat-content'>

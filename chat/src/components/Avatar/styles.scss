@@ -8,12 +8,35 @@
     display: flex;
     height: 48px;
     justify-content: center;
+    position: relative;
     width: 48px;
+
     * {
       color: $cinza-claro-texto;
     }
-  }
 
+    &::before {
+        border-radius: 50%;
+        bottom: 0;
+        content: '';
+        height: 10px;
+        position: absolute;
+        right: 0;
+        width: 10px;
+        z-index:2;
+        border: solid 1px white;
+    }
+    &--online {
+        &::before {
+            background-color: green;
+        }
+    }
+    &--offline {
+        &::before {
+            background-color: red;
+        }
+    }
+  }
   &-image {
     border-radius: 50%;
     height: 48px;

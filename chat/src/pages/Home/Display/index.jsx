@@ -44,6 +44,7 @@ export default function Display() {
   if (!data) {
     return (
       <div className='display'>
+
         <div className='display-empty'>
           <p>
             Você ainda não selecionou uma conversa! <br /> Selecione uma
@@ -59,7 +60,7 @@ export default function Display() {
     <div className='display'>
       <div className='display-header'>
         <div className='display-header-content'>
-          <Avatar imagem={data.imagem} />
+          <Avatar imagem={data.imagem} isLogged={data.isLogged} />
           <div className='display-header-content-nome'>
             <h2>{data.name}</h2>
             <span onClick={verDetalhes}>
