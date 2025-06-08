@@ -1,12 +1,14 @@
 import { useCallback, useContext } from 'react';
 import { userContext } from './context';
 import fetch from 'config/fetchInstance';
+import { socket } from 'config/socket';
 
 const useUser = () => {
   const { data, setData } = useContext(userContext);
 
   function login(user) {
     const newUser = { ...user, isLogged: true };
+    socket.emit("save-id", user.id)
     localStorage.setItem('user', JSON.stringify(newUser));
     setData({ ...user, isLogged: true });
   }
@@ -31,6 +33,7 @@ const useUser = () => {
   }, [data?.id, setData])
 
   function logout() {
+    socket.emit("logoff", data?.id)
     localStorage.removeItem('user');
     setData(null);
   }

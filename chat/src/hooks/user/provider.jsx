@@ -75,13 +75,16 @@ export const UserProvider = ({ children }) => {
     if (data?.id) {
       socket.on("new-login", (id) => {
         if (data.id !== id)  {
-          changeLoggedStatus(data.id, true)
+          changeLoggedStatus(id, true)
         }
       })
-  
+      socket.on("user-logoff", (id) => {
+        changeLoggedStatus(id, false)
+      })
     }
     return () => {
       socket.off("new-login")
+      socket.off("user-logoff")
     }
   }, [data?.id, changeLoggedStatus])
   return (
